@@ -1,0 +1,6 @@
+mutation calculate_web_points{
+    calculate_web_points{
+        status
+        message
+    }
+}

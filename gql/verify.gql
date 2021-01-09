@@ -1,0 +1,6 @@
+mutation verify($slide:Int!){
+    verify_slide(slide:$slide){
+        status
+        accessToken
+    }
+}
