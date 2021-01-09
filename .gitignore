@@ -103,6 +103,4 @@ dist
 # TernJS port file
 .tern-port
 
-__sapper__
-
 .sessions
