@@ -39,6 +39,7 @@
         runInterval()
     })
     let showNext = false
+    let loading = false
     const runInterval = ()=>{
         let interval = setInterval(()=>{
             let step = (100/8)*0.005
@@ -52,11 +53,13 @@
     }
     const finProg = ()=>{
         if(!process.browser)return;
+        loading = true
         return grecaptcha.execute('6LdEDyYaAAAAAAgRMYwA01ImK8hN5gGi9au6KTgB', {action: `step${step}`}).then(function(token) {
             if(token){
                 window.serverCall('/settoken',{token}).then((res)=>res.json()).then(()=>{
                     $session.googleToken = token
                     window.serverCall('/steps/nextStep',{step}).then(res=>res.json()).then(data=>{
+                        loading = false
                         if(data.status == 'success'){
                             showNext = true
                             $session.step = step
@@ -87,6 +90,9 @@
       <div style="width: {progress}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"></div>
     </div>
 </div>
+{#if loading}
+<p class="text-center">الرجاء الإنتظار ...</p>
+{/if}
 {#if showNext}
 <button on:click={nextSlide} class="w-full h-12 px-6 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 info-text">التالي</button>
 {/if}

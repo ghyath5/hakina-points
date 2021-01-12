@@ -26,6 +26,6 @@ export async function post(req, res) {
         }
         return res.end(JSON.stringify(data.verify_slide));
     }).catch((e)=>{
-        res.end(JSON.stringify(e));
+        res.end(JSON.stringify(e.graphQLErrors[0]));
     })
 }
