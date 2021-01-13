@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "7akina",
+  "description": "حاكينا نقاط",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev --port 5555",
