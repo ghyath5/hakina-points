@@ -5,7 +5,10 @@
 	import { stores, goto } from '@sapper/app';
 	import {onMount} from 'svelte'
 	const { session } = stores();
+	let prevent = false
 	function submit(){
+		if(prevent) return;
+		prevent = true
 		if(/https?:\/\/(t(elegram)?\.me|telegram\.org)\/([a-zA-Z0-9\_]{5,32})$\/?/.test(link) || /https?:\/\/(t(elegram)?\.me|telegram\.org)\/g_7akina_bot\?start=([0-9]*)/.test(link)){
             return grecaptcha.execute('6LdEDyYaAAAAAAgRMYwA01ImK8hN5gGi9au6KTgB', {action: 'auth'}).then(function(token) {
 				if(token){
@@ -38,6 +41,7 @@
         try {
 			let response = await window.serverCall('/autho/auth',{link})
 			let data = await response.json()
+			prevent = false
 			btnText = 'تحقق'
             if(!data.state){
 				infoMsg = data.message ? data.message:'حدث خطأ الرجاء مراسلة المطور'
@@ -47,6 +51,7 @@
 			$session.step = 1
 			goto('/steps/1')
         } catch (error) {
+			prevent = false
 			btnText = 'تحقق'
             infoMsg = 'حدث خطأ الرجاء مراسلة المطور'
         }

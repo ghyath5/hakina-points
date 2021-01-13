@@ -1,0 +1,12 @@
+query ads{
+  ads(order_by:{pos:asc}){
+    id
+    action_url
+    duration
+    description
+    title
+    img
+    action_text
+    log
+  }
+}
