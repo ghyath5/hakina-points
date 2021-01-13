@@ -5,24 +5,28 @@ import * as sapper from '@sapper/server';
 
 import { json } from 'body-parser';
 import session from 'express-session';
-import sessionFileStore from 'session-file-store';
-const FileStore = new sessionFileStore(session);
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
-polka() // You can also use Express
+const redis = require('redis')
+
+var RedisStore = require('connect-redis')(session)
+var redisClient = redis.createClient ({
+    host : 'ec2-34-236-220-81.compute-1.amazonaws.com',
+    port : '18809',
+    password: 'p3566bca7c3acedf60d62f9fa135d1a383c90b879044cf52eb8791f642da98de7'
+});
+export default polka() // You can also use Express
 	.use(
 		json(),
 		session({
 			secret: '3ZvFENu2wyexcREhDy6Qc3TGrvwzYubrbLervjv4',
-			resave: true,
+			resave: false,
 			saveUninitialized: true,
 			cookie: {
 				maxAge: 600000
 			},
-			store: new FileStore({
-				path: `.sessions`
-			})
+			store: new RedisStore({ client: redisClient })
 		}),
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),

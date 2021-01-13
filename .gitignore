@@ -106,3 +106,4 @@ dist
 .sessions
 
 __sapper__
+.vercel
