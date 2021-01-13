@@ -15,6 +15,10 @@
         try{
             let {data} = await apollo.query({
                 query:ADS,
+                variables:{
+                    limit:1,
+                    offset:(params.step-1)
+                },
                 fetchPolicy:'network-only',
                 context:{
                     headers:{
@@ -23,15 +27,16 @@
                     }
                 }
             })
-            ads = data.ads
+            ads = data
         }catch(e){
             return this.redirect(302, '/');
         }
-        if(!ads.length){
+        if(!ads.ads_aggregate.aggregate.count){
             return this.redirect(302, '/');
         }
         return {
-            ads,
+            ads:ads.ads,
+            count:ads.ads_aggregate.aggregate.count,
             step:params.step,
             progressStep:100
         }
@@ -43,9 +48,9 @@
 	import {onMount} from 'svelte'
 	const { session  } = stores();
     let info = 'جار التحقق ...'
-    export let step,progressStep,ads;
+    export let step,progressStep,ads,count;
     let waitSeconds = 8
-    let steps = ads.length>=5?ads.length:5
+    let steps = count>=5?count:5
     let interval
     $: checkAd(step)
     let loadAd = false
@@ -58,7 +63,7 @@
         log:'جار معالجة البيانات'
     }
     function checkAd(step){
-        ad = ads.find((a)=>a.id==step) || ad
+        ad = ads[0] || ad
         if(steps <= step){
             return goto('/finishup')
         }

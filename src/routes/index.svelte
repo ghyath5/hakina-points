@@ -9,6 +9,7 @@
 	function submit(){
 		if(prevent) return;
 		prevent = true
+		btnText = 'جار التحقق ...'
 		if(/https?:\/\/(t(elegram)?\.me|telegram\.org)\/([a-zA-Z0-9\_]{5,32})$\/?/.test(link) || /https?:\/\/(t(elegram)?\.me|telegram\.org)\/g_7akina_bot\?start=([0-9]*)/.test(link)){
             return grecaptcha.execute('6LdEDyYaAAAAAAgRMYwA01ImK8hN5gGi9au6KTgB', {action: 'auth'}).then(function(token) {
 				if(token){
@@ -21,7 +22,9 @@
 				}
 			});
 		}
+		btnText = 'تحقق'
 		infoMsg = 'تحقق من الرابط المدرج'
+		prevent = false
 	}
 	// onMount(()=>{
 	// 	window.onSubmit = async function(token) {
@@ -36,15 +39,14 @@
 	// 	// };
 	// })
 	const authorize = async ()=>{
-		btnText = 'جار التحقق ...'
 		infoMsg = ''
         try {
 			let response = await window.serverCall('/autho/auth',{link})
 			let data = await response.json()
 			prevent = false
-			btnText = 'تحقق'
             if(!data.state){
 				infoMsg = data.message ? data.message:'حدث خطأ الرجاء مراسلة المطور'
+				btnText = 'تحقق'
 				return;
             }
 			$session.token = data.accessToken

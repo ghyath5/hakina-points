@@ -1,5 +1,5 @@
-query ads{
-  ads(order_by:{pos:asc}){
+query ads($limit:Int,$offset:Int){
+  ads(order_by:{pos:asc},limit:$limit,offset:$offset){
     id
     action_url
     duration
@@ -8,5 +8,10 @@ query ads{
     img
     action_text
     log
+  }
+  ads_aggregate{
+    aggregate{
+      count
+    }
   }
 }
