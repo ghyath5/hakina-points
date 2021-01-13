@@ -36,7 +36,7 @@
 		btnText = 'جار التحقق ...'
 		infoMsg = ''
         try {
-			let response = await window.serverCall('/auth',{link})
+			let response = await window.serverCall('/autho/auth',{link})
 			let data = await response.json()
 			btnText = 'تحقق'
             if(!data.state){
@@ -75,7 +75,7 @@
 <div class="text-center">
 	{#if !can_rewarded}
 	<h3 class="text-2xl info-text mb-3" style="direction:rtl">الجائزة التالية بعد:</h3>
-	<p class="text-4xl ">{waitFor}</p>
+	<p class="text-6xl ">{waitFor}</p>
 	{:else}
 	<p class="text-red-500 info-text mb-2">{infoMsg}</p>
 	<input type="text"

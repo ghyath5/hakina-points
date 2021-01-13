@@ -6,7 +6,7 @@
     "dev": "sapper dev --port 5555",
     "build": "sapper build --legacy",
     "export": "sapper export --legacy",
-    "start": "npx serve __sapper__/export"
+    "start": "node __sapper__/build"
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",

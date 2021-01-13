@@ -1,5 +1,5 @@
-import { apollo } from "../apollo"
-import AUTH_MUTATION  from '../../gql/auth.gql'
+import { apollo } from "../../apollo"
+import AUTH_MUTATION  from '../../../gql/auth.gql'
 export async function post(req, res) {
     const {link} = req.body
     if(!req.session.googleToken){
