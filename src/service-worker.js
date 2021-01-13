@@ -8,6 +8,7 @@ const to_cache = shell.concat(files);
 const cached = new Set(to_cache);
 
 self.addEventListener('install', event => {
+	console.log('ServiceWorker installed')
 	event.waitUntil(
 		caches
 			.open(ASSETS)
@@ -80,3 +81,19 @@ self.addEventListener('fetch', event => {
 			})
 	);
 });
+
+
+// self.addEventListener('notificationclick', event => {
+//   event.waitUntil(self.clients.matchAll().then(clients => {
+//     if (clients.length){ // check if at least one tab is already open
+//       clients[0].focus();
+//     } else {
+//       self.clients.openWindow('/');
+//     }
+//   }));
+// });
+
+// self.addEventListener('push', e=>{
+// 	console.log(e.data);
+// 	self.registration.showNotification('data.title')
+// })

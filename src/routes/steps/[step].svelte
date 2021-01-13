@@ -42,7 +42,7 @@
     let loading = false
     const runInterval = ()=>{
         let interval = setInterval(()=>{
-            let step = (100/8)*0.005
+            let step = (100/6)*0.005
             progressStep-=step
             progress =  progressStep
             if(progressStep<= 0){
