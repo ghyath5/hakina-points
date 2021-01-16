@@ -7,6 +7,7 @@ query ads($limit:Int,$offset:Int){
     title
     img
     action_text
+    type
     log
   }
   ads_aggregate{

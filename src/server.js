@@ -12,8 +12,8 @@ const redis = require('redis')
 
 var RedisStore = require('connect-redis')(session)
 var redisClient = redis.createClient ({
-    host : 'ec2-34-236-220-81.compute-1.amazonaws.com',
-    port : '18809',
+    host : 'ec2-54-160-158-53.compute-1.amazonaws.com',
+    port : '30119',
     password: 'p3566bca7c3acedf60d62f9fa135d1a383c90b879044cf52eb8791f642da98de7'
 });
 export default polka() // You can also use Express

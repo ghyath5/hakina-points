@@ -26,7 +26,6 @@
 		infoMsg = 'تحقق من الرابط المدرج'
 		prevent = false
 	}
-	// onMount(()=>{
 	// 	window.onSubmit = async function(token) {
 			
 	// 	};

@@ -64,12 +64,18 @@
     }
     function checkAd(step){
         ad = ads[0] || ad
+        if(process.browser){
+            let playerContainer = document.getElementById('youtube')
+            if(!playerContainer)return;
+            playerContainer.innerHTML = '<div id="player" class="text-center m-auto"></div>'
+        }
         if(steps <= step){
             return goto('/finishup')
         }
         waitSeconds = ad.duration
         info = ad.log
-        runInterval()
+        runInterval()        
+        runyoutubeApi()
         loadAd = false
     }
     let progress = 100
@@ -78,9 +84,14 @@
     })
     let showNext = false
     let loading = false
+    let processLoading = true
+    if(ad.type == 'youtube'){
+        processLoading = false
+    }
     const runInterval = ()=>{
         clearInterval(interval)
         interval = setInterval(()=>{
+            if(!processLoading)return;
             let step = (100/waitSeconds)*0.005
             progressStep-=step
             progress =  progressStep
@@ -122,6 +133,44 @@
         loadAd = true
         goto(`/steps/${Number($session.step)+1}`)
     }
+    // 3. This function creates an <iframe> (and YouTube player)
+    //    after the API code downloads.
+    var player;
+    const runyoutubeApi = ()=>{
+        if(!process.browser || ad.type !='youtube')return;
+        player = new YT.Player('player', {
+            height: '390',
+            width: '640',
+            videoId: ad.action_url,
+            events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+    // 4. The API will call this function when the video player is ready.
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    // 5. The API calls this function when the player's state changes.
+    //    The function indicates that when playing a video (state=1),
+    //    the player should play for six seconds and then stop.
+    let done = false;
+    function onPlayerStateChange(event) {
+        if(event.data != 1){
+            processLoading = false
+        }else{
+            processLoading = true
+        }
+        // if (event.data == YT.PlayerState.PLAYING && !done) {
+        //     setTimeout(stopVideo, 6000);
+        //     done = true;
+        // }
+    }
+    function stopVideo() {
+        player.stopVideo();
+    }
 </script>
 <div class="relative p-0">
     <p class="text-center info-text mb-2" style="direction:rtl">
@@ -141,7 +190,14 @@
 {#if !loadAd}
 <div transition:slide|local class="mt-8 text-center border-black border p-3">
     <h1 class="info-text text-gray-600 mb-3 text-3xl">{ad.title}</h1>
+    <!-- {#if ad.type == 'youtube'} -->
+    <div id="youtube">
+        <div id="player" class="text-center m-auto"></div>
+    </div>
+    <!-- {/if} -->
     <p class="info-text mb-5 text-2xl">{ad.description}</p>
+    {#if ad.action_url && ad.action_text}
     <a target="_blank" href={ad.action_url} class="w-full h-12 px-6 text-indigo-100 transition-colors duration-150 bg-blue-500 rounded-lg focus:shadow-outline hover:bg-indigo-800 info-text">{ad.action_text}</a>
+    {/if}
 </div>
 {/if}
